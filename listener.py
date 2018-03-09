@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
 
-import os
 import time
+import json
+from os import environ
 from random import randint
-import re
 from slackclient import SlackClient
-from network import check_connection
+from network import check_connection, get_ip
 from k8s import *
 
-sc = SlackClient(os.environ['SLACK_TOKEN'])
-listen_channel = os.environ['SLACK_CHANNEL']
-node_ip = os.environ['K8S_NODE_IP']
+sc = SlackClient(environ['SLACK_TOKEN'])
+listen_channel = environ['SLACK_CHANNEL']
+memes = environ['MEMES'].split()
 
 usage = """
+show - wisdom for your journey
+where - ip address of the host I'm running on
+get pods - list of pods on k8s cluster
+get deployments - list of deployments on k8s cluster
+get nodes - list of nodes in k8s cluster
 """
 
 timestamp = lambda : time.strftime("%Y-%m-%dT%H:%M:%S")
@@ -68,18 +73,30 @@ def post_message(message):
         text=message,
     )
 
-def random_meme():
-    memes = os.environ['MEMES'].split()
-    return memes[randint(0, len(memes) - 1)]
+def post_image(url):
+    attachment = {
+        'fallback': 'meme',
+        'image_url': url
+    }
+    sc.api_call(
+        "chat.postMessage",
+        as_user=True,
+        channel=listen_channel,
+        attachments=[attachment]
+    )
 
 def handle_command(args, ts):
     response = None
     command = args[0]
     args.pop(0)
     if command == 'show':
-        post_message(random_meme())
+        post_message(memes[randint(0, len(memes) - 1)])
     elif command == 'where':
-        post_message("looks like I'm running at {}".format(node_ip))
+        if 'K8S_NODE_IP' in environ:
+            location = environ['K8S_NODE_IP']
+        else:
+            location = get_ip()
+        post_message("looks like I'm running at {}".format(location))
     elif command == 'get':
         if args[0] == 'pods':
             response = get_pods('default')
