@@ -3,14 +3,15 @@
 import time
 import json
 from os import environ
-from random import randint
+from random import randint, shuffle
 from slackclient import SlackClient
 from network import check_connection, get_ip
 from k8s import *
 
 sc = SlackClient(environ['SLACK_TOKEN'])
 listen_channel = environ['SLACK_CHANNEL']
-memes = environ['MEMES'].split()
+meme_list = environ['MEMES'].split()
+shuffle(meme_list)
 
 usage = """
 show - wisdom for your journey
@@ -37,7 +38,7 @@ def main():
         nodes = get_nodes()
         post_message(nodes)
     except:
-        port_message("Derp! Something went wrong talking to the cluster...")
+        post_message("Derp! Something went wrong talking to the cluster...")
     while True:
         for event in sc.rtm_read():
             command, ts = parse_event(event, bot_id)
@@ -90,7 +91,8 @@ def handle_command(args, ts):
     command = args[0]
     args.pop(0)
     if command == 'show':
-        post_message(memes[randint(0, len(memes) - 1)])
+        post_image(meme_list[0])
+        meme_list.append(meme_list.pop(0))
     elif command == 'where':
         if 'K8S_NODE_IP' in environ:
             location = environ['K8S_NODE_IP']
@@ -105,9 +107,8 @@ def handle_command(args, ts):
         elif args[0] == 'deployments':
             response = get_deployments('default')
         else:
-            response = ["didn't get that. Try again..."]
-        post_message('{} {}:'.format(len(response), args[0])
-                     + response)
+            response = "didn't get that. Try again..."
+        post_message(response)
     elif command == 'deploy':
         post_message("deploying {} to container {} in deployment {}".format(
             args[1], args[0], args[0])
