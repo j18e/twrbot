@@ -19,6 +19,8 @@ where - ip address of the host I'm running on
 get pods - list of pods on k8s cluster
 get deployments - list of deployments on k8s cluster
 get nodes - list of nodes in k8s cluster
+deploy dhuser/webapp:12.2 my-webapp - install a new Docker image to the first container of an existing deployment
+scale my-webapp
 """
 
 timestamp = lambda : time.strftime("%Y-%m-%dT%H:%M:%S")
@@ -110,15 +112,12 @@ def handle_command(args, ts):
             response = "didn't get that. Try again..."
         post_message(response)
     elif command == 'deploy':
-        post_message("deploying {} to container {} in deployment {}".format(
-            args[1], args[0], args[0])
-        )
-        deploy_image(args[0], args[0], args[1])
-        handle_command(['get', 'deployments'])
+        post_message("installing image {} to deployment {}".format(
+            args[0], args[1]))
+        post_message(update_image(args[1], 'default', args[0]))
     elif command == 'scale':
         post_message("scaling {} to {} replicas...".format(args[0], args[1]))
-        scale_deployment(args[0], args[1])
-        handle_command(['get', 'pods'])
+        post_message(scale_deployment(args[0], 'default', args[1]))
     elif 'help' in command:
         post_message("Here's what you can ask me:\n" + usage)
     else:
