@@ -1,4 +1,5 @@
 import socket
+from os import environ
 
 def check_connection(host, port):
     try:
@@ -10,6 +11,10 @@ def check_connection(host, port):
         return False
 
 def get_ip():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    return s.getsockname()[0]
+    if 'K8S_NODE_IP' in environ:
+        result = environ['K8S_NODE_IP']
+    else:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        result = s.getsockname()[0]
+    return result
