@@ -8,4 +8,5 @@ ADD network.py network.py
 ADD k8s.py k8s.py
 
 ENTRYPOINT ["python", "listener.py"]
+CMD ["slack"]
 
