@@ -3,7 +3,7 @@
 pushd $(dirname $0)
 
 REPO="jamesmacfarlane"
-IMAGE="${REPO}/$(basename ${PWD})"
+IMAGE="$(basename ${PWD})"
 TAG="$1"
 
 docker build -t ${IMAGE}:${TAG} .
