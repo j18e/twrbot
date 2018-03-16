@@ -3,10 +3,9 @@ FROM python:3.6.4-alpine
 ADD requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-ADD twrbot.py twrbot.py
-ADD listener.py listener.py
-ADD network.py network.py
-ADD k8s.py k8s.py
+ADD bot.py bot.py
+ADD interactions.py interactions.py
+ADD k8s_funcs.py k8s_funcs.py
 
-ENTRYPOINT ["python", "twrbot.py"]
+ENTRYPOINT ["python", "bot.py"]
 CMD ["slack"]
