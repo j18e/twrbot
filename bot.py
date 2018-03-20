@@ -90,7 +90,9 @@ def await_confirmation(sc, channel, bot_id, user, timeout):
                 event['user'] == user):
                 log_event(event)
                 return True
+        timeout -= 1
         time.sleep(1)
+    log_event('timed out awaiting confirmation')
     return False
 
 def log_event(event):
