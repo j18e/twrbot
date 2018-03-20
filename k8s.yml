@@ -21,15 +21,12 @@ spec:
         - name: MEMES
           value: >
             https://i.imgflip.com/261j5e.jpg
+            https://i.imgflip.com/26oli7.jpg
             https://i.imgflip.com/261j7a.jpg
             https://i.imgflip.com/261j97.jpg
-            https://i.imgflip.com/261jel.jpg
-            https://i.imgflip.com/261jgm.jpg
             https://i.imgflip.com/261jid.jpg
             https://i.imgflip.com/261jjw.jpg
             https://i.imgflip.com/261kw4.jpg
-            https://i.imgflip.com/261kxz.jpg
-            https://i.imgflip.com/261l0i.jpg
             https://i.imgflip.com/261l20.jpg
         volumeMounts:
         - mountPath: /root/.kube
