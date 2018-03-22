@@ -49,6 +49,7 @@ def delete_resource(kind, name, namespace='default'):
 
 def scale_deployment(name, replicas, namespace='default'):
     try:
+        replicas = int(replicas)
         deployment = apps.read_namespaced_deployment_scale(name, namespace)
         deployment.spec.replicas = replicas
         resp = apps.patch_namespaced_deployment_scale(name, namespace, deployment)
