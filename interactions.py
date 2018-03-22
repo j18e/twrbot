@@ -1,3 +1,4 @@
+import re
 import socket
 import paramiko
 from os import environ
@@ -86,9 +87,7 @@ def sort_manifests(doc_list):
 
 def get_ip():
     if 'GATEWAY_ADDR' in environ:
-        result = ''
-        command = "ifconfig {} | grep 'inet addr' | cut -d: -f2 | \
-            awk '{print $1}'".format(environ['GATEWAY_EXTERNAL_INT'])
+        command = "ifconfig %s" % (environ['GATEWAY_EXTERNAL_INT'])
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         client.connect(environ['GATEWAY_ADDR'],
@@ -96,7 +95,9 @@ def get_ip():
                        password=environ['GATEWAY_PASSWORD'])
         stdin, stdout, stderr = client.exec_command(command)
         for line in stdout:
-            result += line
+            if 'inet addr:' in line:
+                result = line.split()[1]
+        result = result.split(':')[1]
         client.close()
     else:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
