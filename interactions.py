@@ -41,7 +41,7 @@ def handle_command(args, confirmed=False):
             must_confirm = True
     elif command == 'deploy':
         try:
-            result = 'attempting to install image {} to deployment {}'.format(
+            result = 'attempting to install image {} to deployment {}\n'.format(
                 args[0], args[1])
             result += deploy_image(args[1], args[0])
         except:
