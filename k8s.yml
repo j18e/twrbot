@@ -13,11 +13,17 @@ spec:
         image: jamesmacfarlane/twrbot:0.5.0
         env:
         - name: SLACK_TOKEN
-          valueFrom: {secretKeyRef: {name: slack, key: slack-token}}
+          valueFrom: {secretKeyRef: {name: slack, key: token}}
         - name: SLACK_CHANNEL
-          valueFrom: {secretKeyRef: {name: slack, key: slack-channel}}
-        - name: K8S_NODE_IP
-          valueFrom: {fieldRef: {fieldPath: status.hostIP}}
+          valueFrom: {secretKeyRef: {name: slack, key: channel}}
+        - name: GATEWAY_EXTERNAL_INT
+          valueFrom: {secretKeyRef: {name: gateway, key: external-int}}
+        - name: GATEWAY_USER
+          valueFrom: {secretKeyRef: {name: gateway, key: user}}
+        - name: GATEWAY_PASSWORD
+          valueFrom: {secretKeyRef: {name: gateway, key: password}}
+        - name: GATEWAY_ADDR
+          valueFrom: {secretKeyRef: {name: gateway, key: address}}
         - name: MEMES
           value: >
             https://i.imgflip.com/261j5e.jpg
