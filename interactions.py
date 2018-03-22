@@ -43,7 +43,7 @@ def handle_command(args, confirmed=False):
         try:
             result = 'attempting to install image {} to deployment {}'.format(
                 args[0], args[1])
-            result += update_image(args[1], args[0])
+            result += deploy_image(args[1], args[0])
         except:
             result = None
     elif command == 'scale':

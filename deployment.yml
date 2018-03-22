@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
       - name: twrbot
-        image: jamesmacfarlane/twrbot:0.6.3
+        image: jamesmacfarlane/twrbot:latest
         env:
         - name: SLACK_TOKEN
           valueFrom: {secretKeyRef: {name: slack, key: token}}
