@@ -85,7 +85,7 @@ def sort_manifests(doc_list):
     return manifests
 
 def get_ip():
-    if 'GW_IP' in environ:
+    if 'GATEWAY_ADDRESS' in environ:
         command = "ifconfig | xargs -n1 | grep 'addr:[0-9]' \
             | grep -v '127.0.0.1\\|{}' | cut -d: -f2".format(environ['GATEWAY_ADDRESS'])
         client = paramiko.SSHClient()
