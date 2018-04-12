@@ -87,14 +87,17 @@ def sort_manifests(doc_list):
 def get_ip():
     if 'GATEWAY_ADDRESS' in environ:
         command = "ifconfig | xargs -n1 | grep 'addr:[0-9]' \
-            | grep -v '127.0.0.1\\|{}' | cut -d: -f2".format(environ['GATEWAY_ADDRESS'])
+            | grep -v '127.0.0.1\\|{}' | cut -d: -f2 | xargs \
+            ".format(environ['GATEWAY_ADDRESS'])
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         client.connect(environ['GATEWAY_ADDRESS'],
                        username=environ['GATEWAY_USER'],
                        password=environ['GATEWAY_PASSWORD'])
         stdin, stdout, stderr = client.exec_command(command)
-        result = stdout
+        result = ''
+        for line in stdout:
+            result += line
         client.close()
     else:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
