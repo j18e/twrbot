@@ -16,13 +16,11 @@ spec:
           valueFrom: {secretKeyRef: {name: slack, key: token}}
         - name: SLACK_CHANNEL
           valueFrom: {secretKeyRef: {name: slack, key: channel}}
-        - name: GATEWAY_EXTERNAL_INT
-          valueFrom: {secretKeyRef: {name: gateway, key: external-int}}
         - name: GATEWAY_USER
           valueFrom: {secretKeyRef: {name: gateway, key: user}}
         - name: GATEWAY_PASSWORD
           valueFrom: {secretKeyRef: {name: gateway, key: password}}
-        - name: GATEWAY_ADDR
+        - name: GATEWAY_ADDRESS
           valueFrom: {secretKeyRef: {name: gateway, key: address}}
         - name: MEMES
           value: >
