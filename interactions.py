@@ -85,11 +85,12 @@ def sort_manifests(doc_list):
     return manifests
 
 def get_ip():
-    if 'GATEWAY_ADDR' in environ:
-        command = "ifconfig %s" % (environ['GATEWAY_EXTERNAL_INT'])
+    if 'GW_IP' in environ:
+        command = "ifconfig | xargs -n1 | grep 'addr:[0-9]' \
+            | grep -v '127.0.0.1\\|{}' | cut -d: -f2".format(environ['GATEWAY_ADDRESS'])
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        client.connect(environ['GATEWAY_ADDR'],
+        client.connect(environ['GATEWAY_ADDRESS'],
                        username=environ['GATEWAY_USER'],
                        password=environ['GATEWAY_PASSWORD'])
         stdin, stdout, stderr = client.exec_command(command)
