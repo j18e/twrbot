@@ -94,10 +94,7 @@ def get_ip():
                        username=environ['GATEWAY_USER'],
                        password=environ['GATEWAY_PASSWORD'])
         stdin, stdout, stderr = client.exec_command(command)
-        for line in stdout:
-            if 'inet addr:' in line:
-                result = line.split()[1]
-        result = result.split(':')[1]
+        result = stdout
         client.close()
     else:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
