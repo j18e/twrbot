@@ -86,9 +86,8 @@ def sort_manifests(doc_list):
 
 def get_ip():
     if 'GATEWAY_ADDRESS' in environ:
-        command = "ifconfig | xargs -n1 | grep 'addr:[0-9]' \
-            | grep -v '127.0.0.1\\|{}' | cut -d: -f2 | xargs \
-            ".format(environ['GATEWAY_ADDRESS'])
+        command = "ip a | grep 'inet ' | grep -v '127.0.0.1\\|{}' | xargs \
+            | cut -d' ' -f2 | cut -d'/' -f1".format(environ['GATEWAY_ADDRESS'])
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         client.connect(environ['GATEWAY_ADDRESS'],
