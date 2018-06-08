@@ -74,10 +74,13 @@ def post_message(sc, ch, msg, ts=None):
 
 def await_command(sc, channel, bot_id):
     while True:
-        for event in sc.rtm_read():
-            args, user = parse_event(event, channel, bot_id)
-            if args:
-                return args, user
+        try:
+            for event in sc.rtm_read():
+                args, user = parse_event(event, channel, bot_id)
+                if args:
+                    return args, user
+        except WebSocketConnectionClosedException:
+            sc.rtm_connect()
         time.sleep(1)
     return None, None
 
